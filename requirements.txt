@@ -1,4 +1,6 @@
 prettymaps==1.0.0
 geopandas==0.12.2
 matplotlib==3.7.0
+numpy==1.24.2
 Shapely~=1.8.5.post1
+opencv-python-headless==4.7.0.68

@@ -8,6 +8,7 @@ from matplotlib.font_manager import FontProperties
 import matplotlib.patheffects as PathEffects
 from shapely.geometry import Polygon, Point
 
+DEBUG = False
 
 def deg2num(lat_deg, lon_deg, zoom):
     lat_rad = math.radians(lat_deg)
@@ -32,10 +33,17 @@ def xy(lat, lon):
     return coords[0][0], coords[1][0]
 
 
-boundaries = [
-    [47.43790627501293, 8.483034608566035],
-    [47.38935788148564, 8.590284281922552]
-]
+if DEBUG:
+    # test only 1 tile
+    boundaries = [
+        [47.411325468128055, 8.543403668695255],
+        [47.411325468128055, 8.543403668695255]
+    ]
+else:
+    boundaries = [
+        [47.43790627501293, 8.473034608566035],
+        [47.38935788148564, 8.590284281922552]
+    ]
 
 # zoom levels to be rendered
 zooms = map(int, sys.argv[1:])  # [13, 14, 15, 16, 17, 18]
@@ -46,9 +54,13 @@ plt.rcParams['figure.dpi'] = 16
 for zoom in zooms:
     # get boundary tiles
     x_min, y_min = deg2num(*boundaries[0], zoom)
-    if zoom == 13:
-        x_min -= 1
     x_max, y_max = deg2num(*boundaries[1], zoom)
+    if not DEBUG:
+        if zoom <= 14:
+            x_min -= 1
+            x_max += 1
+        if zoom == 13:
+            x_max += 1
     x_tiles = x_max - x_min + 1
     y_tiles = y_max - y_min + 1
     print(x_tiles, y_tiles)
@@ -151,7 +163,7 @@ for zoom in zooms:
     textprops = dict(
         font=FontProperties(
             fname='GT-Walsheim-Regular.ttf',
-            size=90
+            size=110
         ),
         horizontalalignment='center',
         verticalalignment='center',
